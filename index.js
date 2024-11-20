@@ -7,6 +7,36 @@ const port = 3000;
 
 app.use(cors());
 
+
+// Default API Endpoint
+function defaultRoute(req) {
+    let hostName = 'https://' + req.hostname;
+    let calculateReturnsRoute = hostName + '/calculate-returns?boughtAt=300&marketPrice=400&quantity=2';
+    let totalReturnsRoute =
+      hostName + '/total-returns?stock1=100&stock2=200&stock3=200&stock4=400';
+    let calculateReturnPercentageRoute = hostName + '/calculate-return-percentage?boughtAt=400&returns=200';
+    let totalReturnPercentageRoute =
+      hostName + '/total-return-percentage?stock1=10&stock2=20&stock3=20&stock4=40';
+    let statusRoute = hostName + '/status?returnPercentage=90';
+  
+    let routes = {
+      calculateReturns: calculateReturnsRoute,
+      totalReturns: totalReturnsRoute,
+      calculateReturnPercentage: calculateReturnPercentageRoute,
+      totalReturnPercentage: totalReturnPercentageRoute,
+      status: statusRoute,
+    };
+    return routes;
+  }
+  
+  app.get('/', (req, res) => {
+    res.status(200).json({
+      status: 200,
+      routes: { ...defaultRoute(req) },
+    });
+  });
+
+
 // Endpoint 1: Calculate the Returns of the Stocks added
 function calculateReturnStocks(boughtAt, marketPrice, quantity) {
   let result = (marketPrice - boughtAt) * quantity;
